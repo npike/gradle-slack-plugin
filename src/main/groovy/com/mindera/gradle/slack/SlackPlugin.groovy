@@ -57,7 +57,7 @@ class SlackPlugin implements Plugin<Project> {
         // only send a slack message if the task failed
         // or the task is registered to be monitored
         if (shouldSendMessage) {
-            SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(mExtension.title, task, state, mTaskLogBuilder.toString())
+            SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(mExtension.channel, mExtension.title, task, state, mTaskLogBuilder.toString())
             SlackApi api = new SlackApi(mExtension.url)
             api.call(slackMessage)
         }

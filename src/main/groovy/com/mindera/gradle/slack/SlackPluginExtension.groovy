@@ -6,6 +6,7 @@ class SlackPluginExtension {
     String url
     List<Object> dependsOnTasks
     String title
+    String channel
     boolean enabled = true
 
     void dependsOnTasks(Object... paths) {
