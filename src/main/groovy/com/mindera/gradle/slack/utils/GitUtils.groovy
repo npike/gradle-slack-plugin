@@ -6,8 +6,17 @@ package com.mindera.gradle.slack.utils
 class GitUtils {
 
     public static String branchName() {
-        def workingBranch = "git rev-parse --abbrev-ref HEAD".execute().text.trim()
+        def workingBranch = "git branch | grep \\* | cut -d ' ' -f2".execute().text.trim()
         return workingBranch
+    }
+
+    public static String tagName() {
+        def workingBranch = "git tag --points-at HEAD".execute().text.trim()
+        return workingBranch
+    }
+
+    public static String tagNameOrBranchName() {
+        return tagName() ?: branchName()
     }
 
     public static String lastCommitAuthor() {

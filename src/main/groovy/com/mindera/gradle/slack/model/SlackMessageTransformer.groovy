@@ -18,9 +18,9 @@ class SlackMessageTransformer {
     private static final String TASK_RESULT_TITLE = 'Task Result'
     private static final String TASK_RESULT_PASSED = 'Passed'
     private static final String TASK_RESULT_FAILED = 'Failed'
-    private static final String BRANCH_TITLE = 'Git Branch'
+    private static final String BRANCH_TITLE = 'Branch/Tag'
     private static final String AUTHOR_TITLE = 'Git Author'
-    private static final String COMMIT_TITLE = 'Git Commit'
+    private static final String COMMIT_TITLE = 'Commit'
 
     static SlackMessage buildSlackMessage(String channel, String title, Task task, TaskState state, String taskLog) {
         Throwable failure = state.getFailure()
@@ -32,7 +32,7 @@ class SlackMessageTransformer {
         attachments.setColor(success ? COLOR_PASSED : COLOR_FAILED)
 
         StringBuilder message = new StringBuilder()
-        message.append(task.getDescription())
+
         if (!success && failure != null && failure.getCause() != null) {
             message.append('\n')
             message.append(failure.getCause())
@@ -44,12 +44,6 @@ class SlackMessageTransformer {
         attachments.setText(message.toString())
         attachments.setFallback(message.toString())
 
-        SlackField taskField = new SlackField()
-        taskField.setTitle(TASK_TITLE)
-        taskField.setValue(task.getName())
-        taskField.setShorten(true)
-        attachments.addFields(taskField)
-
         SlackField resultField = new SlackField()
         resultField.setTitle(TASK_RESULT_TITLE)
         resultField.setValue(success ? TASK_RESULT_PASSED : TASK_RESULT_FAILED)
@@ -58,7 +52,7 @@ class SlackMessageTransformer {
 
         SlackField branchField = new SlackField()
         branchField.setTitle(BRANCH_TITLE)
-        branchField.setValue(GitUtils.branchName())
+        branchField.setValue(GitUtils.tagNameOrBranchName())
         branchField.setShorten(true)
         attachments.addFields(branchField)
 
